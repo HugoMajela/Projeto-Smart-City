@@ -106,7 +106,7 @@ node server.js
 
 ---
 
-## 📌 Observações
+## Observações
 
 - O modelo Mistral responde apenas com o nome do produto.
 - A API faz uma busca usando regex no campo `titulo` do MongoDB.
@@ -114,7 +114,7 @@ node server.js
 
 ---
 
-## 🛠️ Futuras Melhorias
+## Futuras Melhorias
 
 - Suporte a múltiplos produtos na mesma pergunta
 - Filtros por preço, mercado ou disponibilidade
@@ -123,6 +123,6 @@ node server.js
 
 ---
 
-## 👨‍💻 Autor
+## Autor
 
 Desenvolvido por **Hugo Majela de Souza** — IF Sudeste MG Campus Manhuaçu
