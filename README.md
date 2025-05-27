@@ -32,6 +32,8 @@ Este projeto é uma **prova de conceito** de um sistema inteligente que:
 
 ## Como Executar
 
+## É necessário que a máquina que estará rodando localmente tenha pelo menos 6 GB de RAM para hospedar o Ollama mistral
+
 ### 1. Instale as dependências
 ```bash
 npm install
