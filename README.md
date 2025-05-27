@@ -1,5 +1,5 @@
 
-# 🛒 Manhuaçu Smart Market — Chatbot com IA + Web Scraping
+# Manhuaçu Smart — Chatbot com IA + Web Scraping
 
 Este projeto é uma **prova de conceito** de um sistema inteligente que:
 - Realiza scraping de produtos de supermercados locais (Pais & Filhos e Paxá)
@@ -9,7 +9,7 @@ Este projeto é uma **prova de conceito** de um sistema inteligente que:
 
 ---
 
-## 📦 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 .
@@ -30,7 +30,7 @@ Este projeto é uma **prova de conceito** de um sistema inteligente que:
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
 ### 1. Instale as dependências
 ```bash
@@ -54,16 +54,20 @@ ollama run mistral
 
 ---
 
-## 🕸️ Web Scraping
+## Web Scraping
 
 ### Supermercado Pais & Filhos
 ```bash
-node Web\ Scraping/paisEFilhos/index.js
+cd '.\Web Scraping\'
+cd .\paisEFilhos\
+node index.js
 ```
 
 ### Supermercado Paxá
 ```bash
-node Web\ Scraping/paxa/index.js
+cd '.\Web Scraping\'
+cd .\paxa\
+node index.js
 ```
 
 Cada scraper:
@@ -73,7 +77,7 @@ Cada scraper:
 
 ---
 
-## 🤖 Executar o Servidor com IA
+## Executar o Servidor com IA
 
 ```bash
 node server.js
@@ -84,19 +88,19 @@ node server.js
 
 ---
 
-## 🧪 Testando com cURL ou Postman
+## Testando com Postman
 
 ### Exemplo:
-```bash
-curl -X POST http://localhost:3000/chat \
-     -H "Content-Type: application/json" \
-     -d '{{"pergunta": "Qual o preço do leite?"}}'
+```json
+{{
+  "pergunta": "Qual o preço do arroz?"
+}}
 ```
 
 ### Resposta esperada:
 ```json
 {{
-  "resposta": "Produto: Leite Italac Integral 1L\nPreço: R$ 4,99 — Mercado: Paxá\nLink: https://..."
+  "resposta": "Produto: ARROZ FIGHERA T1 5KG PARB\nPreço: R$ 31,79 — Mercado: Paxá\nLink: https://paxaemcasa.com.br/loja/produto/arroz-fighera-t1-5kg-parb-36/"
 }}
 ```
 
@@ -114,9 +118,8 @@ curl -X POST http://localhost:3000/chat \
 
 - Suporte a múltiplos produtos na mesma pergunta
 - Filtros por preço, mercado ou disponibilidade
-- Painel administrativo
 - Agendamento automático dos scrapers
-- Deploy com Docker
+- Desenvolver a API para que a IA não apenas interprete a pergunta, mas também procure no banco de dados
 
 ---
 
