@@ -10,6 +10,9 @@
     "express": "^5.1.0",
     "fuzzball": "^2.2.2",
     "mongoose": "^8.15.0",
-    "openai": "^4.100.0"
+    "openai": "^4.100.0",
+    "pluralize": "^8.0.0",
+    "puppeteer": "^24.11.2",
+    "string-similarity": "^4.0.4"
   }
 }

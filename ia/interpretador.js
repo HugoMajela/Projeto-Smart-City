@@ -1,30 +1,34 @@
-import Produto from '../models/Produto.js'
 import axios from 'axios'
 
-// Envia a pergunta para o Ollama e retorna o nome do produto mencionado
 export async function interpretarPergunta(pergunta) {
-    const prompt = `
-Você é um assistente que ajuda a encontrar produtos em supermercados. 
-Apenas retorne o nome do produto mencionado na pergunta abaixo, sem explicações.
+  const prompt = `
+Extraia apenas o nome do produto mencionado no texto abaixo.  
+Saída:
+- Somente o nome do produto
+- Uma palavra ou termo por linha
+- Letras minúsculas
+- Sem acentos
+- Sem explicações
 
-Pergunta: "${pergunta}"
+Texto: "${pergunta}"
+  `
 
-Nome do produto:
-    `.trim()
+  try {
+    const response = await axios.post('http://localhost:11434/api/generate', {
+      model: 'mistral',
+      prompt,
+      stream: false
+    })
 
-    try {
-        const resposta = await axios.post('http://localhost:11434/api/generate', {
-            model: 'mistral',
-            prompt,
-            stream: false
-        })
+    const texto = response.data.response.trim()
 
-        const texto = resposta.data.response.trim()
-        if (!texto || texto.length < 2) return null
-
-        return texto
-    } catch (err) {
-        console.error('Erro ao consultar Ollama:', err.response?.data || err.message)
-        return null
-    }
+    // Apenas linhas simples e válidas
+    return texto
+      .split('\n')
+      .map(l => l.trim().toLowerCase())
+      .filter(l => l.length > 0)
+  } catch (error) {
+    console.error('Erro ao interpretar pergunta com Ollama:', error.message)
+    return []
+  }
 }

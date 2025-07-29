@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import Produto from './models/Produto.js'
 import { interpretarPergunta } from './ia/interpretador.js'
+import pluralize from 'pluralize'
 
 await mongoose.connect('mongodb://localhost:27017/produtos')
 
@@ -10,33 +11,57 @@ const PORT = 3000
 
 app.use(express.json())
 
+// Normaliza: minúsculas, sem acento, sem pontuação
+function normalizar(texto) {
+  return texto
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // remove acentos
+    .replace(/[^a-z0-9 ]/g, '') // remove pontuação
+    .trim()
+}
+
+// Ex: 'fraldas' => 'fralda'
+function singularizar(texto) {
+  return pluralize.singular(texto)
+}
 
 app.post('/chat', async (req, res) => {
   const { pergunta } = req.body
 
   if (!pergunta || pergunta.trim().length < 2) {
-    return res.status(400).json({ resposta: "Pergunta inválida. Tente novamente." })
+    return res.status(400).json({ resposta: 'Pergunta inválida. Tente novamente.' })
   }
 
-  const nomeProduto = await interpretarPergunta(pergunta)
+  const nomesProdutos = await interpretarPergunta(pergunta)
+  console.log('🎯 Termos do Ollama:', nomesProdutos)
 
-  if (!nomeProduto) {
-    return res.json({ resposta: "Desculpe, não entendi sua pergunta ou o produto não foi encontrado." })
+  if (!nomesProdutos || nomesProdutos.length === 0) {
+    return res.json({ resposta: 'Não identifiquei produtos na sua pergunta.' })
   }
 
-  const produtos = await Produto.find({ titulo: { $regex: nomeProduto, $options: 'i' } })
+  // Normaliza e singulariza os termos
+  const termosBusca = nomesProdutos.map(p => singularizar(normalizar(p)))
+  console.log('🔍 Termos normalizados para busca:', termosBusca)
 
-  if (produtos.length === 0) {
-    return res.json({ resposta: `Não encontrei "${nomeProduto}" no momento.` })
+  // Busca todos os produtos
+  const todosProdutos = await Produto.find()
+  const produtosFiltrados = todosProdutos.filter(produto => {
+    const tituloNormalizado = normalizar(produto.titulo)
+    return termosBusca.some(termo => tituloNormalizado.includes(termo))
+  })
+
+  if (produtosFiltrados.length === 0) {
+    return res.json({ resposta: 'Nenhum produto encontrado com os termos fornecidos.' })
   }
 
-  const resposta = produtos.map(p =>
+  const resposta = produtosFiltrados.map(p =>
     `Produto: ${p.titulo}\nPreço: ${p.preco} — Mercado: ${p.mercado}\nLink: ${p.link}`
-  ).join("\n\n")
+  ).join('\n\n')
 
   res.json({ resposta })
 })
 
 app.listen(PORT, () => {
-  console.log(`Teste do chatbot rodando em http://localhost:${PORT}/chat`)
-});
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}/chat`)
+})
