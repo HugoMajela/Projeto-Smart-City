@@ -17,7 +17,7 @@ function normalizar(texto) {
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '') // remove acentos
-    .replace(/[^a-z0-9 ]/g, '') // remove pontuação
+    .replace(/[^a-z0-9 ]/g, '')      // remove pontuação
     .trim()
 }
 
@@ -40,8 +40,15 @@ app.post('/chat', async (req, res) => {
     return res.json({ resposta: 'Não identifiquei produtos na sua pergunta.' })
   }
 
-  // Normaliza e singulariza os termos
-  const termosBusca = nomesProdutos.map(p => singularizar(normalizar(p)))
+  // Normaliza, divide em palavras, singulariza e remove duplicatas
+  const termosBusca = [...new Set(
+    nomesProdutos
+      .map(p => normalizar(p))
+      .flatMap(p => p.split(/\s+/))         // divide cada termo por espaço
+      .map(p => singularizar(p))            // singulariza
+      .filter(p => p.length > 0)            // ignora vazios
+  )]
+
   console.log('🔍 Termos normalizados para busca:', termosBusca)
 
   // Busca todos os produtos
