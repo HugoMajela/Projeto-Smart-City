@@ -62,11 +62,14 @@ app.post('/chat', async (req, res) => {
     return res.json({ resposta: 'Nenhum produto encontrado com os termos fornecidos.' })
   }
 
-  const resposta = produtosFiltrados.map(p =>
-    `Produto: ${p.titulo}\nPreço: ${p.preco} — Mercado: ${p.mercado}\nLink: ${p.link}`
-  ).join('\n\n')
+  const resposta = produtosFiltrados.map(p => ({
+    titulo: p.titulo,
+    preco: p.preco,
+    empresa: p.empresa,
+    link: p.link
+  }))
 
-  res.json({ resposta })
+  res.json(resposta)
 })
 
 app.listen(PORT, () => {

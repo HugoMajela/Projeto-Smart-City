@@ -39,7 +39,7 @@ export async function scrapPaisEFilhos() {
                 titulo: produto.innerText.trim(),
                 preco: precos[i] ? precos[i].innerText.trim() : 'Indisponível',
                 link: links[i] ? links[i].href : '#',
-                mercado: 'Pais e Filhos'
+                empresa: 'Pais e Filhos'
             });
         });
         return produtos;
@@ -47,7 +47,7 @@ export async function scrapPaisEFilhos() {
 
     console.log(resultado)
 
-    await Produto.deleteMany({ mercado: 'Pais e Filhos' });
+    await Produto.deleteMany({ empresa: 'Pais e Filhos' });
     await Produto.insertMany(resultado);
     console.log('Produtos do Pais e Filhos salvos no banco de dados');
 

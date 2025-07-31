@@ -20,7 +20,7 @@ export async function scrapPaxa() {
                 titulo: produto.innerText,
                 preco: precos[i] ? precos[i].innerText : 'Indisponível',
                 link: links[i] ? links[i].href : '#',
-                mercado: 'Paxá'
+                empresa: 'Paxá'
             });
         });
         return produtos;
@@ -28,7 +28,7 @@ export async function scrapPaxa() {
 
     console.log(resultado)
 
-    await Produto.deleteMany({ mercado: 'Paxá' });
+    await Produto.deleteMany({ empresa: 'Paxá' });
     await Produto.insertMany(resultado);
     console.log('Produtos do Paxá salvos no banco de dados');
 

@@ -36,7 +36,7 @@ export async function scrapDrogasil() {
                 titulo: produto.innerText,
                 preco: precos[i] ? precos[i].innerText : 'Indisponível',
                 link: links[i] ? links[i].href : "#",
-                mercado: 'Drogasil'
+                empresa: 'Drogasil'
             });
         });
         return produtos;
@@ -44,7 +44,7 @@ export async function scrapDrogasil() {
 
     console.log(resultado)
 
-    await Produto.deleteMany({ mercado: 'Drogasil' });
+    await Produto.deleteMany({ empresa: 'Drogasil' });
     await Produto.insertMany(resultado);
     console.log('Produtos do Drogasil salvos no banco de dados');
 
