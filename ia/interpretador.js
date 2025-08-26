@@ -31,11 +31,14 @@ Texto: "${pergunta}"
   `
 
   try {
-    const response = await axios.post('http://localhost:11434/api/generate', {
-      model: 'mistral',
+    const OLLAMA_URL = 'http://host.docker.internal:11434'
+
+    const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
+      model: 'mistral:latest',
       prompt,
       stream: false
     })
+
 
     const texto = response.data.response.trim()
 

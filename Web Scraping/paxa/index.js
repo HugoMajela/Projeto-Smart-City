@@ -3,7 +3,10 @@ import '../../database/conexao.js'
 import Produto from '../../models/Produto.js';
 
 export async function scrapPaxa() {
-    const navegador = await puppeteer.launch({ headless: "new" })
+    const navegador = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const pagina = await navegador.newPage();
     await pagina.goto("https://paxaemcasa.com.br/loja/")
     await pagina.waitForNetworkIdle();

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mongo_projetosmart
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: app_projetosmart
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/produtos
+      - OLLAMA_URL=http://host.docker.internal:11434
+    depends_on:
+      - mongo
+    command: ["node", "server.js"]
+
+volumes:
+  mongo_data:

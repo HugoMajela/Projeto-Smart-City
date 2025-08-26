@@ -3,7 +3,10 @@ import '../../database/conexao.js';
 import Produto from '../../models/Produto.js';
 
 export async function scrapDrogasil() {
-    const navegador = await puppeteer.launch({ headless: false });
+    const navegador = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const pagina = await navegador.newPage();
 
     await pagina.goto("https://www.drogasil.com.br/", { waitUntil: 'networkidle2' });

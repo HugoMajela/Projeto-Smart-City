@@ -4,7 +4,8 @@ import Produto from './models/Produto.js'
 import { interpretarPergunta } from './ia/interpretador.js'
 import pluralize from 'pluralize'
 
-await mongoose.connect('mongodb://localhost:27017/produtos')
+const mongoUri = process.env.MONGO_URI || 'mongodb://mongo:27017/produtos';
+await mongoose.connect(mongoUri);
 
 const app = express()
 const PORT = 3000

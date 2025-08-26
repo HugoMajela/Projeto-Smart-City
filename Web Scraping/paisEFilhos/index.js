@@ -5,7 +5,10 @@ import { setTimeout as delay } from "node:timers/promises"
 
 
 export async function scrapPaisEFilhos() {
-    const navegador = await puppeteer.launch({ headless: false })
+    const navegador = await puppeteer.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const pagina = await navegador.newPage();
     await pagina.goto("https://supermercadopaisefilhos.com.br/")
     await pagina.waitForNetworkIdle();
